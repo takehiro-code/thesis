@@ -1,0 +1,30 @@
+
+# ignore folders
+
+darknet/
+seq_comp/
+seq_test/
+Org_Imgs_png/
+SFU-HW-Objects-v1/
+SFU-HW-Objects-v1_perfect/
+Yolo_mark/
+SFU-HW-Objects-v1_r5/
+
+
+
+# ignore files
+
+data/*
+*.txt
+*.png
+*.jpg
+*.csv
+*.zip
+*.rar
+*.log
+*.bin
+*.yuv
+*.mp4
+*.md
+*.pt
+*.weight
