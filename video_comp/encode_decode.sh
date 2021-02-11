@@ -6,7 +6,7 @@ qp=22
 seq='ClassB/BasketballDrive_1920x1080_50.yuv'
 name='BasketballDrive'
 out='qp'${qp}'_classB_'${name}
-./TAppEncoderStatic -c encoder_lowdelay_P_main.cfg -c ./per-sequence/${name}.cfg -i ${seq} -q ${qp} -b out_bin/${out}.bin | tee out_log/log_${out}.txt
+./TAppEncoderStatic -c encoder_lowdelay_P_main.cfg -c ./per-sequence/${name}.cfg -i ${seq} -q ${qp} -b out_bin/${out}.bin | tee out_log/log_enc_${out}.txt
 ./TAppDecoderStatic -b out_bin/${out}.bin -o out_dec/rec_${out}.yuv | tee out_log/log_${out}.txt
 
 
