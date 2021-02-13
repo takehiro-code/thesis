@@ -11,20 +11,38 @@ Yolo_mark/
 SFU-HW-Objects-v1_r5/
 Object-Detection-Metrics/
 
+py-motmetrics/res_dir_exp/
+py-motmetrics/res_dir_opt/
+py-motmetrics/res_dir_comp/
+py-motmetrics/gt_dir/
+py-motmetrics/res_dir/
+
+mAP/input/
+mAP/input_example/
+mAP/output/
+
+yolov3/output/
+yolov3/runs/
+
+sort/output/
+sort/input/
+
+video_comp/out_bin/
+video_comp/out_dec/
+video_comp/out_log/
+video_comp/per-sequence/
 
 # ignore files
-
-data/*
-*.txt
 *.png
 *.jpg
-*.csv
 *.json
+*.log
 *.zip
 *.rar
-*.log
 *.bin
 *.yuv
+*.avi
 *.mp4
 *.pt
 *.weight
+*.pyc

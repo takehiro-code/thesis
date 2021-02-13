@@ -1,13 +1,13 @@
 
-class_cat=ClassC
-seq_name=PartyScene
+class_cat=ClassB
+seq_name=BasketballDrive
 #class_id=0
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
 comp_source_path=/local-scratch/tta46/thesis/seq_comp
 
-rm data/tuning_detector_result.txt
+rm data/tuning_detector_result_${class_cat}_${seq_name}.txt
 
 declare -a conf_thres=($(seq 0.1 0.05 0.9))
 declare -a iou_thres=($(seq 0.1 0.05 0.9))
@@ -19,7 +19,7 @@ do
   do
     for img_s in ${img_size[@]}
     do
-      echo "Running for conf_thres=${conf}, iou_thres=${iou}, img_size=${img_s}"
+      echo "Running detector for conf_thres=${conf}, iou_thres=${iou}, img_size=${img_s}"
       cd yolov3
       rm output/${class_cat}/${seq_name}/labels/*.txt
       python3 detect.py\
@@ -29,7 +29,7 @@ do
           --img-size ${img_s}\
           --iou-thres ${iou}\
           --save-txt\
-          --classes 0 41 58 74 77\
+          --classes 0 32 56\
           --project output/${class_cat}\
           --name ${seq_name}\
           --exist-ok >/dev/null 2>/dev/null
@@ -44,6 +44,8 @@ do
     
       cd mAP
       python3 main.py -na -np -q\
+        --class_cat ${class_cat}\
+        --seq_name ${seq_name}\
         --conf_thres ${conf}\
         --iou_thres ${iou}\
         --img_size ${img_s}
@@ -53,8 +55,8 @@ do
 done
 
 
-python3 grid_search.py\
-  --input_path data/tuning_detect_result.txt
+#python3 grid_search.py\
+#  --input_path data/tuning_detector_result_${class_cat}_${seq_name}.csv
 
 
 

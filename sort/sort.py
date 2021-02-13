@@ -337,6 +337,8 @@ if __name__ == '__main__':
         if(display):
           fig.canvas.flush_events()
           plt.draw()
+          #img_name = fn.split("/")[-1] # when you want to generate images
+          #plt.savefig(f"../data/vid/{img_name}")
           ax1.cla()
 
   print("Total Tracking took: %.3f seconds for %d frames or %.1f FPS" % (total_time, total_frames, total_frames / total_time))
