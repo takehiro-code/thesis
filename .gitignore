@@ -1,6 +1,7 @@
 
 # ignore folders
 
+coco128/
 darknet/
 seq_comp/
 seq_test/
@@ -23,6 +24,7 @@ mAP/output/
 
 yolov3/output/
 yolov3/runs/
+yolov3/test/
 
 sort/output/
 sort/input/

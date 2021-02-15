@@ -1,0 +1,1 @@
+python3 test.py --weights weights/yolov3.pt --data data/test.yaml

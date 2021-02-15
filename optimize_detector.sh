@@ -1,13 +1,13 @@
 
-class_cat=ClassB
-seq_name=BasketballDrive
-#class_id=0
+class_cat=ClassC
+seq_name=PartyScene
+class_id=0
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
 comp_source_path=/local-scratch/tta46/thesis/seq_comp
 
-rm data/tuning_detector_result_${class_cat}_${seq_name}.txt
+rm data/tuning_detector_result_${class_cat}_${seq_name}.csv
 
 declare -a conf_thres=($(seq 0.1 0.05 0.9))
 declare -a iou_thres=($(seq 0.1 0.05 0.9))
@@ -29,7 +29,7 @@ do
           --img-size ${img_s}\
           --iou-thres ${iou}\
           --save-txt\
-          --classes 0 32 56\
+          --classes 0 41 58 74 77\
           --project output/${class_cat}\
           --name ${seq_name}\
           --exist-ok >/dev/null 2>/dev/null

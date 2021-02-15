@@ -8,13 +8,14 @@ test_source_path=/local-scratch/tta46/thesis/seq_test
 comp_source_path=/local-scratch/tta46/thesis/seq_comp
 
 rm data/tuning_tracker_result_${class_cat}_${seq_name}.csv
-rm data/one_iter.txt
-#rm py-motmetrics/res_dir_opt/*.txt
+rm py-motmetrics/res_dir_opt/*.txt
 mkdir -p py-motmetrics/res_dir_opt
 
 conf=0.2
 iou_detect=0.35
 img_s=640
+
+uuid=$(uuidgen)
 
 # first generates the yolo v3 output
 echo "Running detector for conf_thres=${conf}, iou_thres=${iou}, img_size=${img_s}"
@@ -65,11 +66,11 @@ do
       cp sort/output/${class_cat}_${seq_name}_${class_id}.txt py-motmetrics/res_dir_opt/
       
       ## evaluate the performance
-      python3 py-motmetrics/motmetrics/apps/eval_motchallenge.py py-motmetrics/gt_dir/ py-motmetrics/res_dir_opt/ > data/one_iter.txt
+      python3 py-motmetrics/motmetrics/apps/eval_motchallenge.py py-motmetrics/gt_dir/ py-motmetrics/res_dir_opt/ > data/one_iter_${uuid}.txt
       
       # extracting values
-      python3 optimize_tracker_formating.py\
-        --input_path data/one_iter.txt\
+      python3 optimize_tracker_format.py\
+        --input_path data/one_iter_${uuid}.txt\
         --output_path data/tuning_tracker_result_${class_cat}_${seq_name}.csv\
         --max_age ${maxa}\
         --min_hits ${minh}\
@@ -79,6 +80,8 @@ do
   done
 done
 
+
+rm data/one_iter_${uuid}.txt
 
 
 
