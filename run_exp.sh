@@ -2,7 +2,7 @@
 # inputs
 class_cat=ClassC
 seq_name=PartyScene
-class_id=0
+class_id="all"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
@@ -55,9 +55,11 @@ else
   python3 detect.py\
       --source ${rgb_source_path}/${class_cat}/${seq_name}/\
       --weights weights/yolov3.pt\
-      --conf 0.25\
+      --conf-thres 0.2\
+      --iou-thres 0.35\
+      --img-size 640\
       --save-txt\
-      --classes 0 32 56\
+      --classes 0 41 58 74 77\
       --project output/${class_cat}\
       --name ${seq_name}\
       --exist-ok
@@ -71,7 +73,11 @@ else
   cd sort
   python3 sort.py\
      --seq_path input/${class_cat}_${seq_name}_${class_id}\
-     --img_path ${rgb_source_path}/${class_cat}/${seq_name}
+     --img_path ${rgb_source_path}/${class_cat}/${seq_name}\
+     --max_age 4\
+     --min_hits 2\
+     --iou_threshold 0.4\
+     --display
   cd ..
   
   mkdir -p py-motmetrics/res_dir_exp
