@@ -1,13 +1,13 @@
 
-class_cat=ClassB
-seq_name=BasketballDrive
-class_id=0
+class_cat=ClassC
+seq_name=PartyScene
+class_id="all"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
 comp_source_path=/local-scratch/tta46/thesis/seq_comp
 
-rm data/tuning_detector_result_${class_cat}_${seq_name}_v2.csv
+rm data/tuning_detector_result_${class_cat}_${seq_name}_${class_id}_v2.csv
 rm py-motmetrics/res_dir_opt/*.txt
 mkdir -p py-motmetrics/res_dir_opt
 
@@ -42,8 +42,9 @@ do
           --conf ${conf}\
           --img-size ${img_s}\
           --iou-thres ${iou}\
+          --save-conf\
           --save-txt\
-          --classes 0 32 56\
+          --classes 0 41 58 74 77\
           --project output/${class_cat}\
           --name ${seq_name}\
           --exist-ok >/dev/null 2>/dev/null
@@ -76,7 +77,7 @@ do
       # extracting values
       python3 optimize_detector_format.py\
         --input_path data/one_iter_${uuid}.txt\
-        --output_path data/tuning_detector_result_${class_cat}_${seq_name}_v2.csv\
+        --output_path data/tuning_detector_result_${class_cat}_${seq_name}_${class_id}_v2.csv\
         --conf_thres ${conf}\
         --iou_thres ${iou}\
         --img_size ${img_s}

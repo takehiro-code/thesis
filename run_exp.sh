@@ -55,9 +55,10 @@ else
   python3 detect.py\
       --source ${rgb_source_path}/${class_cat}/${seq_name}/\
       --weights weights/yolov3.pt\
-      --conf-thres 0.2\
-      --iou-thres 0.35\
+      --conf-thres 0.25\
+      --iou-thres 0.55\
       --img-size 640\
+      --save-conf\
       --save-txt\
       --classes 0 41 58 74 77\
       --project output/${class_cat}\
@@ -74,10 +75,9 @@ else
   python3 sort.py\
      --seq_path input/${class_cat}_${seq_name}_${class_id}\
      --img_path ${rgb_source_path}/${class_cat}/${seq_name}\
-     --max_age 4\
-     --min_hits 2\
-     --iou_threshold 0.4\
-     --display
+     --max_age 1\
+     --min_hits 5\
+     --iou_threshold 0.4
   cd ..
   
   mkdir -p py-motmetrics/res_dir_exp

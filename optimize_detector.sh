@@ -1,7 +1,7 @@
 
 class_cat=ClassC
 seq_name=PartyScene
-class_id=0
+class_id="all"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
@@ -28,6 +28,7 @@ do
           --conf ${conf}\
           --img-size ${img_s}\
           --iou-thres ${iou}\
+          --save-conf\
           --save-txt\
           --classes 0 41 58 74 77\
           --project output/${class_cat}\

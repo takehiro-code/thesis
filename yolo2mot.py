@@ -88,20 +88,18 @@ if __name__ == '__main__':
                     else:
                         frame = int(txt.split("_")[-1].split(".")[0]) + 1      
                     #print(f"for frame {frame} ...")
-                    class_id, x, y, w, h = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
+                    class_id, x, y, w, h, conf_arr = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
 
                     # Either numpy array or single value if you read one row
                     if isinstance(class_id, np.ndarray):
                         frame_id = np.repeat(frame, len(class_id))
                         object_id = np.repeat(-1, len(class_id)) # no tracking, so assign -1
-                        conf_arr = np.repeat(1, len(class_id))
                         pos_x_3d = np.repeat(-1, len(class_id)) # not 3d, so assign -1
                         pos_y_3d = np.repeat(-1, len(class_id)) # not 3d, so assign -1
                         pos_z_3d = np.repeat(-1, len(class_id)) # not 3d, so assign -1
                     else:
                         frame_id = frame
                         object_id = -1 # no tracking, so assign -1
-                        conf_arr = 1
                         pos_x_3d = -1 # not 3d, so assign -1
                         pos_y_3d = -1 # not 3d, so assign -1
                         pos_z_3d = -1 # not 3d, so assign -1
@@ -121,7 +119,7 @@ if __name__ == '__main__':
                     # save into det file
                     np.savetxt(output_file, np.column_stack(\
                         (frame_id, object_id, x1, y1, w, h, conf_arr, pos_x_3d, pos_y_3d, pos_z_3d)\
-                            ), delimiter=',', fmt="%d,%d,%s,%s,%s,%s,%d,%d,%d,%d")
+                            ), delimiter=',', fmt="%d,%d,%s,%s,%s,%s,%s,%d,%d,%d")
             
 
             # ----------------------------------------------------------------
@@ -229,20 +227,18 @@ if __name__ == '__main__':
                     else:
                         frame = int(txt.split("_")[-1].split(".")[0]) + 1      
                     #print(f"for frame {frame} ...")
-                    class_id, x, y, w, h = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
+                    class_id, x, y, w, h, conf_arr = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
 
                     # Either numpy array or single value if you read one row
                     if isinstance(class_id, np.ndarray):
                         frame_id = np.repeat(frame, len(class_id))
                         object_id = np.repeat(-1, len(class_id)) # no tracking, so assign -1
-                        conf_arr = np.repeat(1, len(class_id))
                         pos_x_3d = np.repeat(-1, len(class_id)) # not 3d, so assign -1
                         pos_y_3d = np.repeat(-1, len(class_id)) # not 3d, so assign -1
                         pos_z_3d = np.repeat(-1, len(class_id)) # not 3d, so assign -1
                     else:
                         frame_id = frame
                         object_id = -1 # no tracking, so assign -1
-                        conf_arr = 1
                         pos_x_3d = -1 # not 3d, so assign -1
                         pos_y_3d = -1 # not 3d, so assign -1
                         pos_z_3d = -1 # not 3d, so assign -1
@@ -272,7 +268,7 @@ if __name__ == '__main__':
                     # save into det file
                     np.savetxt(output_file, np.column_stack(\
                         (frame_id, object_id, x1, y1, w, h, conf_arr, pos_x_3d, pos_y_3d, pos_z_3d)\
-                            ), delimiter=',', fmt="%d,%d,%s,%s,%s,%s,%d,%d,%d,%d")
+                            ), delimiter=',', fmt="%d,%d,%s,%s,%s,%s,%s,%d,%d,%d")
                     #frame += 1
 
             # ----------------------------------------------------------------

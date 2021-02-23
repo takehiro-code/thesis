@@ -1,18 +1,18 @@
 
 class_cat=ClassC
 seq_name=PartyScene
-class_id=0
+class_id="all"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
 comp_source_path=/local-scratch/tta46/thesis/seq_comp
 
-rm data/tuning_tracker_result_${class_cat}_${seq_name}.csv
+rm data/tuning_tracker_result_${class_cat}_${seq_name}_${class_id}.csv
 rm py-motmetrics/res_dir_opt/*.txt
 mkdir -p py-motmetrics/res_dir_opt
 
-conf=0.2
-iou_detect=0.35
+conf=0.25
+iou_detect=0.55
 img_s=640
 
 uuid=$(uuidgen)
@@ -27,6 +27,7 @@ python3 detect.py\
     --conf ${conf}\
     --img-size ${img_s}\
     --iou-thres ${iou_detect}\
+    --save-conf\
     --save-txt\
     --classes 0 41 58 74 77\
     --project output/${class_cat}\
@@ -71,7 +72,7 @@ do
       # extracting values
       python3 optimize_tracker_format.py\
         --input_path data/one_iter_${uuid}.txt\
-        --output_path data/tuning_tracker_result_${class_cat}_${seq_name}.csv\
+        --output_path data/tuning_tracker_result_${class_cat}_${seq_name}_${class_id}.csv\
         --max_age ${maxa}\
         --min_hits ${minh}\
         --iou_thres ${iou_track}

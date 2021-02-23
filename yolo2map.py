@@ -61,13 +61,7 @@ if __name__ == '__main__':
             txt = txt.replace("\\","/")
             txt_name = txt.split("/")[-1]
             with open(f"{output_dir}/{txt_name}", 'w') as output_file:
-                class_id, x, y, w, h = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
-
-                # Either numpy array or single value if you read one row
-                if isinstance(class_id, np.ndarray):
-                    conf_arr = np.repeat(1, len(class_id))
-                else:
-                    conf_arr = 1
+                class_id, x, y, w, h, conf_arr = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
 
                 # conversion of bbox
                 x = normalize(x, 0, 1, 0, img_w)
@@ -84,7 +78,7 @@ if __name__ == '__main__':
                 # save into det file
                 np.savetxt(output_file, np.column_stack(\
                     (class_id, conf_arr, x1, y1, x2, y2)\
-                        ), delimiter=' ', fmt="%d %d %s %s %s %s")
+                        ), delimiter=' ', fmt="%d %s %s %s %s %s")
 
         # ----------------------------------------------------------------
         # Convert GT files
@@ -96,12 +90,6 @@ if __name__ == '__main__':
             txt_name = txt.split("/")[-1]
             with open(f"{output_gt_dir}/{txt_name}", 'w') as output_file:
                 class_id, object_id, x, y, w, h = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
-
-                # Either numpy array or single value if you read one row
-                if isinstance(class_id, np.ndarray):
-                    conf_arr = np.repeat(1, len(class_id))
-                else:
-                    conf_arr = 1
 
                 # conversion of bbox
                 x = normalize(x, 0, 1, 0, img_w)
