@@ -1,13 +1,13 @@
 
-class_cat=ClassC
-seq_name=PartyScene
+class_cat=ClassB
+seq_name=BasketballDrive
 class_id="all"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
 comp_source_path=/local-scratch/tta46/thesis/seq_comp
 
-rm data/tuning_detector_result_${class_cat}_${seq_name}.csv
+rm data/tuning_detector_result_${class_cat}_${seq_name}_${class_id}.csv
 
 declare -a conf_thres=($(seq 0.1 0.05 0.9))
 declare -a iou_thres=($(seq 0.1 0.05 0.9))
@@ -47,6 +47,7 @@ do
       python3 main.py -na -np -q\
         --class_cat ${class_cat}\
         --seq_name ${seq_name}\
+        --class_id ${class_id}\
         --conf_thres ${conf}\
         --iou_thres ${iou}\
         --img_size ${img_s}

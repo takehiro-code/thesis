@@ -20,6 +20,7 @@ parser.add_argument('-i', '--ignore', nargs='+', type=str, help="ignore a list o
 # argparse receiving list of classes with specific IoU (e.g., python main.py --set-class-iou person 0.7)
 parser.add_argument('--class_cat', type=str, help="Class Category")
 parser.add_argument('--seq_name', type=str, help="Sequence name")
+parser.add_argument('--class_id', type=str, help="Specific Class ID or all")
 parser.add_argument('--set-class-iou', nargs='+', type=str, help="set IoU for a specific class.")
 parser.add_argument('--conf_thres',type=float, default=0.25, help="Confidence threshold used in yolo v3")
 parser.add_argument('--iou_thres', type=float, default=0.45, help="IOU threshold used in yolo v3")
@@ -735,7 +736,7 @@ with open(output_files_path + "/output.txt", 'w') as output_file:
     print(text)
 
     # generating result
-    with open(f"../data/tuning_detector_result_{args.class_cat}_{args.seq_name}.csv", 'a') as f:
+    with open(f"../data/tuning_detector_result_{args.class_cat}_{args.seq_name}_{str(args.class_id)}.csv", 'a') as f:
         print(f"{args.conf_thres},{args.iou_thres},{args.img_size},{mAP}", file=f)
 
 """

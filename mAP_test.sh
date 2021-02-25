@@ -37,6 +37,7 @@ cd mAP
 python3 main.py -na\
   --class_cat ${class_cat}\
   --seq_name ${seq_name}\
+  --class_id ${class_id}\
   --conf_thres ${conf}\
   --iou_thres ${iou}\
   --img_size ${img_s}
