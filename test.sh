@@ -1,7 +1,3 @@
-
-class_cat=ClassC
-seq_name=PartyScene
-class_id="all"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
@@ -43,9 +39,11 @@ comp_source_path=/local-scratch/tta46/thesis/seq_comp
 #cd ..
 
 
-
-time bash optimize_detector.sh > data/log/tuning_detector_${class_cat}_${seq_name}.log
-time bash optimize_detector_v2.sh > data/log/tuning_detector_${class_cat}_${seq_name}_${class_id}_v2.log
-#time bash optimize_tracker.sh > data/log/tuning_tracker_${class_cat}_${seq_name}_${class_id}.log
+#time bash optimize_detector.sh > data/log/tuning_detector_${class_cat}_${seq_name}.log
+#time bash optimize_detector_v2.sh > data/log/tuning_detector_${class_cat}_${seq_name}_${class_id}_v2.log
 
 
+class_cat=ClassC
+seq_name=PartyScene
+class_id="0"
+time bash optimize_tracker.sh > data/log/tuning_tracker_${class_cat}_${seq_name}_${class_id}.log

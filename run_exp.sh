@@ -50,6 +50,8 @@ then
 
 else
 
+  classes_filter=(0 41 58 74 77)
+  
   cd yolov3
   rm output/${class_cat}/${seq_name}/labels/*.txt
   python3 detect.py\
@@ -60,7 +62,7 @@ else
       --img-size 640\
       --save-conf\
       --save-txt\
-      --classes 0 41 58 74 77\
+      --classes ${classes_filter[@]}\
       --project output/${class_cat}\
       --name ${seq_name}\
       --exist-ok

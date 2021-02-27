@@ -1,6 +1,6 @@
 
-class_cat=ClassC
-seq_name=PartyScene
+class_cat=ClassB
+seq_name=BasketballDrive
 class_id="all"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
