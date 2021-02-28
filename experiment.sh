@@ -1,13 +1,19 @@
 
 src_addr='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
-rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
-yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
-test_source_path=/local-scratch/tta46/thesis/seq_test
-out_dec_rgb_path=/local-scratch/tta46/thesis/video_comp/out_dec_rgb
+rgb_source_path='/local-scratch/share_dataset/labled_hevc_sequences'
+yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
+test_source_path='/local-scratch/tta46/thesis/seq_test'
+out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
-# decoding
+#prepare and clean up
+mkdir -p py-motmetrics/res_dir_comp
+rm data/experiment_result.csv
+rm py-motmetrics/res_dir/*.txt
+
+uuid=$(uuidgen) # unique identifier
+
 class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE')
-class_arr=('ClassB')
+# class_arr=('ClassB') # for testing
 qp_arr=(18 22 26 30 34 38)
 msr_arr=(16 32 64)
 
@@ -16,11 +22,13 @@ do
     if [ ${class_cat} == 'ClassB' ]
     then
         seq_name_arr=('BasketballDrive' 'Cactus' 'Kimono' 'ParkScene')
-        # test stage
         resln='1920x1080'
-        seq_name_arr=('BasketballDrive')
-        qp_arr=(18)
-        msr_arr=(16)
+
+        # test stage
+        # seq_name_arr=('BasketballDrive')
+        # qp_arr=(18)
+        # msr_arr=(64)
+
     elif [ ${class_cat} == 'ClassC' ]
     then
         seq_name_arr=('BasketballDrill' 'PartyScene' 'RaceHorsesC')
@@ -89,7 +97,7 @@ do
             for msr in ${msr_arr[@]}
             do
                 cd video_comp
-                echo "decoding ${class_cat} ${seq_name} at qp=${qp}, msr=${msr}"
+                echo "decoding ${class_cat} ${seq_name} with resolution ${resln} at qp=${qp}, msr=${msr}"
                 out=${class_cat}_${seq_name}_qp${qp}_msr${msr}
 
                 # first clean up the space
@@ -109,11 +117,11 @@ do
                 # running detector
                 for class_id in ${class_id_arr[@]}
                 do
-                    if [ class_id == "all" ]
+                    if [ ${class_id} == "all" ]
                     then
                         classes_filter=${class_id_arr[@]::${#class_id_arr[@]}-1} # all elements except last element
                     else
-                        classes_filter=(class_id)
+                        classes_filter=(${class_id})
                     fi
 
                     cd yolov3
@@ -145,17 +153,29 @@ do
                         --min_hits 5\
                         --iou_threshold 0.4
                     cd ..
-                    
-                    mkdir -p py-motmetrics/res_dir_comp
+
+                    # clean up the result folder from py-motmetrics
+                    rm py-motmetrics/res_dir_comp/*.txt
                     
                     cp sort/output/${class_cat}_${seq_name}_${class_id}.txt py-motmetrics/res_dir_comp/
+                    cp sort/output/${class_cat}_${seq_name}_${class_id}.txt py-motmetrics/res_dir/ # keep copy in res_dir
                     
                     ## evaluate the performance
-                    python3 py-motmetrics/motmetrics/apps/eval_motchallenge.py py-motmetrics/gt_dir/ py-motmetrics/res_dir_comp/
+                    python3 py-motmetrics/motmetrics/apps/eval_motchallenge.py py-motmetrics/gt_dir/ py-motmetrics/res_dir_comp/ > data/one_iter_${uuid}.txt
 
-                    ### 
+                    # extracting values
+                    python3 experiment_tracker_format.py\
+                        --input_path data/one_iter_${uuid}.txt\
+                        --output_path data/experiment_result.csv\
+                        --class_cat ${class_cat}\
+                        --seq_name ${seq_name}\
+                        --class_id ${class_id}\
+                        --qp ${qp}\
+                        --msr ${msr}
                 done
             done
         done
     done
 done
+
+rm data/one_iter_${uuid}.txt
