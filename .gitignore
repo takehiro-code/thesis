@@ -12,6 +12,7 @@ Yolo_mark/
 SFU-HW-Objects-v1_r5/
 Object-Detection-Metrics/
 temp/
+.ipynb_checkpoints/
 
 py-motmetrics/res_dir_exp/
 py-motmetrics/res_dir_opt/
