@@ -49,46 +49,68 @@ do
         if [ ${seq_name} == 'BasketballDrive' ]
         then
             class_id_arr=(0 32 56 "all")
+            yuv_name="BasketballDrive_1920x1080_50.yuv"
         elif [ ${seq_name} == 'Cactus' ]
         then
             class_id_arr=(58 "all")
+            yuv_name="Cactus_1920x1080_50.yuv"
         elif [ ${seq_name} == 'Kimono' ]
         then
             class_id_arr=(0 26 "all")
+            yuv_name="Kimono1_1920x1080_24.yuv"
         elif [ ${seq_name} == 'ParkScene' ]
         then
             class_id_arr=(0 1 13 "all")
+            yuv_name="ParkScene_1920x1080_24.yuv"
         elif [ ${seq_name} == 'BasketballDrill' ]
         then
             class_id_arr=(0 32 56 "all")
+            yuv_name="BasketballDrill_832x480_50.yuv"
         elif [ ${seq_name} == 'PartyScene' ]
         then
             class_id_arr=(0 41 58 74 77 "all")
+            yuv_name="PartyScene_832x480_50.yuv"
         elif [ ${seq_name} == 'RaceHorsesC' ]
         then
             class_id_arr=(0 17 "all")
+            yuv_name="RaceHorses_832x480_30.yuv"
         elif [ ${seq_name} == 'BasketballPass' ]
         then
             class_id_arr=(0 32 56 "all")
+            yuv_name="BasketballPass_416x240_50.yuv"
         elif  [ ${seq_name} == 'BlowingBubbles' ]
         then
             class_id_arr=(0 41 77 "all")
+            yuv_name="BlowingBubbles_416x240_50.yuv"
         elif [ ${seq_name} == 'RaceHorsesD' ]
         then
             class_id_arr=(0 17 "all")
+            yuv_name="RaceHorses_416x240_30.yuv"
         elif [ ${seq_name} == 'FourPeople' ]
         then
             class_id_arr=(0 41 56 58 "all")
+            yuv_name="FourPeople_1280x720_60.yuv"
         elif [ ${seq_name} == 'Johnny' ]
         then
             class_id_arr=(0 27 63 "all")
+            yuv_name="Johnny_1280x720_60.yuv"
         elif [ ${seq_name} == 'KristenAndSara' ]
         then
             class_id_arr=(0 63 67 "all")
+            yuv_name="KristenAndSara_1280x720_60.yuv"
         else
             echo "Other sequence name not implemented"
             exit 0
         fi
+
+        #color conversion
+        cd video_comp
+        rm out_dec_rgb/*.png
+        python3 yuv2png_converter.py\
+            --input ${yuv_source_path}/${class_cat}/${yuv_name}\
+            --resolution ${resln}\
+            --output_dir out_dec_rgb
+        cd ..
 
         # running detector
         for class_id in ${class_id_arr[@]}
@@ -103,7 +125,7 @@ do
             cd yolov3
             rm output/${class_cat}/${seq_name}/labels/*.txt
             python3 detect.py\
-                --source ${rgb_source_path}/${class_cat}/${seq_name}/\
+                --source ${out_dec_rgb_path}/\
                 --weights weights/yolov3.pt\
                 --conf-thres 0.25\
                 --iou-thres 0.55\
@@ -124,7 +146,7 @@ do
             cd sort
             python3 sort.py\
                 --seq_path input/${class_cat}_${seq_name}_${class_id}\
-                --img_path ${rgb_source_path}/${class_cat}/${seq_name}/\
+                --img_path ${out_dec_rgb_path}/\
                 --max_age 1\
                 --min_hits 5\
                 --iou_threshold 0.4
