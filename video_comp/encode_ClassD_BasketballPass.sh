@@ -4,8 +4,11 @@ class='ClassD'
 seq="${src_addr}/${class}/BasketballPass_416x240_50.yuv"
 name='BasketballPass'
 
-declare -a qp_arr=(18 22 26 30 34 38)
-declare -a msr_arr=(16 32 64)
+#qp_arr=(18 22 26 30 34 38)
+#msr=(16 32 64)
+
+qp_arr=(6 10 14 18 22 26 30 34 38 42 46)
+msr_arr=(8 16 32 48 64 80 96)
 
 for qp in ${qp_arr[@]}
 do
