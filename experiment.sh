@@ -5,17 +5,20 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
+output_path='data/experiment_result_v2_ClassBCD.csv'
+
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
-rm data/experiment_result.csv
+rm ${output_path}
 rm py-motmetrics/res_dir/*.txt
 
 uuid=$(uuidgen) # unique identifier
 
-class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE')
+#class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE') # entire experiment
+class_arr=('ClassB' 'ClassC' 'ClassD') # Part of the experiment
 # class_arr=('ClassB') # for testing
-qp_arr=(18 22 26 30 34 38)
-msr_arr=(16 32 64)
+qp_arr=(6 10 14 18 22 26 30 34 38 42 46)
+msr_arr=(8 16 32 48 64 80 96)
 
 for class_cat in ${class_arr[@]}
 do
@@ -166,7 +169,7 @@ do
                     # extracting values
                     python3 experiment_tracker_format.py\
                         --input_path data/one_iter_${uuid}.txt\
-                        --output_path data/experiment_result.csv\
+                        --output_path ${output_path}\
                         --class_cat ${class_cat}\
                         --seq_name ${seq_name}\
                         --class_id ${class_id}\
