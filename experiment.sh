@@ -10,7 +10,7 @@ output_path='data/experiment_result_v2_ClassBCD.csv'
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
 rm ${output_path}
-rm py-motmetrics/res_dir/*.txt
+#rm py-motmetrics/res_dir/*.txt
 
 uuid=$(uuidgen) # unique identifier
 

@@ -105,6 +105,7 @@ def main():
     accs, names = compare_dataframes(gt, ts)
 
     metrics = list(mm.metrics.motchallenge_metrics)
+    metrics += ['num_matches', 'num_detections', 'num_objects', 'num_predictions', 'idtp', 'idfp', 'idfn']
     if args.exclude_id:
         metrics = [x for x in metrics if not x.startswith('id')]
 

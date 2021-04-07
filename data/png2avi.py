@@ -4,7 +4,7 @@ import re
 import pdb
 
 image_folder = 'vid'
-video_name = 'ClassB_Cactus_58.avi'
+video_name = 'ClassD_BasketballPass_0.avi'
 
 def natural_sort(l): 
     convert = lambda text: int(text) if text.isdigit() else text.lower() 

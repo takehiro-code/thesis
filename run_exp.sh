@@ -1,8 +1,8 @@
 
 # inputs
-class_cat=ClassC
-seq_name=PartyScene
-class_id="all"
+class_cat=ClassD
+seq_name=BlowingBubbles
+class_id="0"
 rgb_source_path=/local-scratch/share_dataset/labled_hevc_sequences
 yuv_source_path=/local-scratch/chyomin/HEVC_Common_Test_Sequence
 test_source_path=/local-scratch/tta46/thesis/seq_test
@@ -21,6 +21,9 @@ then
       --source ${test_source_path}/${class_cat}/${seq_name}/\
       --weights weights/yolov3.pt\
       --conf 0.25\
+      --iou-thres 0.55\
+      --img-size 640\
+      --save-conf\
       --save-txt\
       --classes ${class_id}\
       --project output/${class_cat}\
@@ -38,7 +41,10 @@ then
   cd sort
   python3 sort.py\
      --seq_path input/${class_cat}_${seq_name}_${class_id}\
-     --img_path ..${test_source_path}/${class_cat}/${seq_name}
+     --img_path ..${test_source_path}/${class_cat}/${seq_name}\
+     --max_age 1\
+     --min_hits 5\
+     --iou_threshold 0.4
   cd ..
   
   mkdir py-motmetrics/res_dir_exp
@@ -50,7 +56,7 @@ then
 
 else
 
-  classes_filter=(0 41 58 74 77)
+  classes_filter=(0)
   
   cd yolov3
   rm output/${class_cat}/${seq_name}/labels/*.txt
@@ -79,7 +85,8 @@ else
      --img_path ${rgb_source_path}/${class_cat}/${seq_name}\
      --max_age 1\
      --min_hits 5\
-     --iou_threshold 0.4
+     --iou_threshold 0.4\
+     --display
   cd ..
   
   mkdir -p py-motmetrics/res_dir_exp
