@@ -5,20 +5,20 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
-output_path='data/experiment_result_v2_ClassBCD.csv'
+output_path='data/experiment_result_v2.csv'
 
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
 rm ${output_path}
+sleep 2
 #rm py-motmetrics/res_dir/*.txt
 
 uuid=$(uuidgen) # unique identifier
 
-#class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE') # entire experiment
-class_arr=('ClassB' 'ClassC' 'ClassD') # Part of the experiment
+class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE') # entire experiment
 # class_arr=('ClassB') # for testing
-qp_arr=(6 10 14 18 22 26 30 34 38 42 46)
-msr_arr=(8 16 32 48 64 80 96)
+qp_arr=(18 22 26 30 34 38 42 46)
+msr_arr=(8 16)
 
 for class_cat in ${class_arr[@]}
 do
@@ -34,7 +34,7 @@ do
 
     elif [ ${class_cat} == 'ClassC' ]
     then
-        seq_name_arr=('BasketballDrill' 'PartyScene' 'RaceHorsesC')
+        seq_name_arr=('BasketballDrill' 'RaceHorsesC') # excluded training sequence 'PartyScene'
         resln='832x480'
     elif [ ${class_cat} == 'ClassD' ]
     then
@@ -105,16 +105,21 @@ do
 
                 # first clean up the space
                 rm out_dec/rec.yuv
+                sleep 2
+
                 rm out_dec_rgb/*.png
+                sleep 2
 
                 # decoding
                 ./TAppDecoderStatic -b out_bin/${out}.bin -o out_dec/rec.yuv | tee out_log/log_${out}.txt
-                
+                sleep 2
+
                 # color conversion
                 python3 yuv2png_converter.py\
                     --input out_dec/rec.yuv\
                     --resolution ${resln}\
                     --output_dir out_dec_rgb
+                sleep 2
                 cd ..
 
                 # running detector
@@ -141,12 +146,14 @@ do
                         --project output/${class_cat}\
                         --name ${seq_name}\
                         --exist-ok
+                    sleep 2
                     cd ..
                     
                     python3 yolo2mot.py\
                         --class_cat ${class_cat}\
                         --seq_name ${seq_name}\
                         --class_id ${class_id}
+                    sleep 2
                     
                     cd sort
                     python3 sort.py\
@@ -155,16 +162,21 @@ do
                         --max_age 1\
                         --min_hits 5\
                         --iou_threshold 0.4
+                    sleep 2
                     cd ..
 
                     # clean up the result folder from py-motmetrics
                     rm py-motmetrics/res_dir_comp/*.txt
+                    sleep 2
                     
                     cp sort/output/${class_cat}_${seq_name}_${class_id}.txt py-motmetrics/res_dir_comp/
+                    sleep 2
                     cp sort/output/${class_cat}_${seq_name}_${class_id}.txt py-motmetrics/res_dir/ # keep copy in res_dir
+                    sleep 2
                     
                     ## evaluate the performance
                     python3 py-motmetrics/motmetrics/apps/eval_motchallenge.py py-motmetrics/gt_dir/ py-motmetrics/res_dir_comp/ > data/one_iter_${uuid}.txt
+                    sleep 2
 
                     # extracting values
                     python3 experiment_tracker_format.py\
@@ -175,6 +187,7 @@ do
                         --class_id ${class_id}\
                         --qp ${qp}\
                         --msr ${msr}
+                    sleep 2
                 done
             done
         done
@@ -182,3 +195,4 @@ do
 done
 
 rm data/one_iter_${uuid}.txt
+sleep 2
