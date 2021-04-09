@@ -113,11 +113,11 @@ do
                 rm out_dec_rgb/*.png
                 sleep 2
 
-                decoding
+                # decoding
                 ./TAppDecoderStatic -b out_bin/${out}.bin -o out_dec/rec.yuv | tee out_log/log_${out}.txt
                 sleep 2
 
-                color conversion
+                # color conversion
                 python3 yuv2png_converter.py\
                     --input out_dec/rec.yuv\
                     --resolution ${resln}\
