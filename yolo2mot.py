@@ -58,7 +58,10 @@ if __name__ == '__main__':
         os.mkdir(f"py-motmetrics/gt_dir/{class_cat}_{seq_name}_{class_cat_filter}/gt")
 
     # path construction
-    img_path = f"{source_path}/{class_cat}/{seq_name}"
+    if source_path == "/local-scratch/share_dataset/labled_hevc_sequences":
+        img_path = f"{source_path}/{class_cat}/{seq_name}"
+    else:
+        img_path = source_path
     input_path = f"yolov3/output/{class_cat}/{seq_name}/labels/*.txt"
     output_path = f"sort/input/{class_cat}_{seq_name}_{class_cat_filter}/det/det.txt"
     input_path_gt = f"SFU-HW-Objects-v1_perfect/{class_cat}/{seq_name}/*.txt"

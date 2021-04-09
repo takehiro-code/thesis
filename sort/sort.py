@@ -20,7 +20,7 @@ from __future__ import print_function
 import os
 import numpy as np
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg') #originally TkAgg. Changed to Agg to hide window frame
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from skimage import io
@@ -267,6 +267,7 @@ def parse_args():
                         type=int, default=3)
     parser.add_argument("--iou_threshold", help="Minimum IOU for match.", type=float, default=0.3)
     parser.add_argument("--img_path", help="Path to image source", type=str, default="../Org_Imgs_png/ClassC/PartyScene")
+    parser.add_argument("--vid_dir_path", help="output directory path to save the video", type=str, default="../data/vid")
     args = parser.parse_args()
     return args
 
@@ -278,11 +279,12 @@ if __name__ == '__main__':
   phase = args.phase
   seq_path = args.seq_path
   img_path = args.img_path
+  vid_dir_path = args.vid_dir_path
   total_time = 0.0
   total_frames = 0
   colours = np.random.rand(32, 3) #used only for display
   if(display):
-    #pdb.set_trace()
+    # pdb.set_trace()
     # if not os.path.exists('mot_benchmark'):
     #   print('\n\tERROR: mot_benchmark link not found!\n\n    Create a symbolic link to the MOT benchmark\n    (https://motchallenge.net/data/2D_MOT_2015/#download). E.g.:\n\n    $ ln -s /path/to/MOT2015_challenge/2DMOT2015 mot_benchmark\n\n')
     #   exit()
@@ -315,7 +317,7 @@ if __name__ == '__main__':
         total_frames += 1
 
         if(display):
-          #pdb.set_trace()
+          # pdb.set_trace()
           #fn = os.path.join('mot_benchmark', phase, seq, 'img1', '%06d.jpg'%(frame))
           fn = glob.glob(f"{img_path}/*%03d.png"%(frame))[0]
           im =io.imread(fn)
@@ -335,10 +337,11 @@ if __name__ == '__main__':
             ax1.text(d[0],d[1],d[4], fontsize=14, color='red')
 
         if(display):
+          # pdb.set_trace()
           fig.canvas.flush_events()
           plt.draw()
           img_name = fn.split("/")[-1] # when you want to generate images
-          plt.savefig(f"../data/vid/{img_name}")
+          plt.savefig(f"{vid_dir_path}/{img_name}")
           ax1.cla()
 
   print("Total Tracking took: %.3f seconds for %d frames or %.1f FPS" % (total_time, total_frames, total_frames / total_time))

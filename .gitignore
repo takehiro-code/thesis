@@ -13,6 +13,7 @@ SFU-HW-Objects-v1_r5/
 Object-Detection-Metrics/
 temp/
 .ipynb_checkpoints/
+video_comp_cedar/
 
 py-motmetrics/res_dir_exp/
 py-motmetrics/res_dir_opt/
