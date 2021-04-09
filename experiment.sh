@@ -134,6 +134,7 @@ do
 
                     cd yolov3
                     rm output/${class_cat}/${seq_name}/labels/*.txt
+                    sleep 2
                     python3 detect.py\
                         --source ${out_dec_rgb_path}/\
                         --weights weights/yolov3.pt\
