@@ -51,3 +51,4 @@ video_comp/per-sequence/
 *.pt
 *.weight
 *.pyc
+*.tgz

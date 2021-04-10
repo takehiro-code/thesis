@@ -153,7 +153,8 @@ do
                     python3 yolo2mot.py\
                         --class_cat ${class_cat}\
                         --seq_name ${seq_name}\
-                        --class_id ${class_id}
+                        --class_id ${class_id}\
+                        --source_path ${out_dec_rgb_path}
                     sleep 2
                     
                     cd sort

@@ -5,9 +5,12 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
+output_path='data/experiment_uncompressed_result_v2.csv'
+
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
-rm data/experiment_uncompressed_result.csv
+rm ${output_path}
+sleep 2
 
 uuid=$(uuidgen) # unique identifier
 
@@ -29,7 +32,7 @@ do
 
     elif [ ${class_cat} == 'ClassC' ]
     then
-        seq_name_arr=('BasketballDrill' 'PartyScene' 'RaceHorsesC')
+        seq_name_arr=('BasketballDrill' 'RaceHorsesC') # excluded training sequence
         resln='832x480'
     elif [ ${class_cat} == 'ClassD' ]
     then
@@ -106,10 +109,12 @@ do
         #color conversion
         cd video_comp
         rm out_dec_rgb/*.png
+        sleep 2
         python3 yuv2png_converter.py\
             --input ${yuv_source_path}/${class_cat}/${yuv_name}\
             --resolution ${resln}\
             --output_dir out_dec_rgb
+        sleep 2
         cd ..
 
         # running detector
@@ -124,6 +129,7 @@ do
 
             cd yolov3
             rm output/${class_cat}/${seq_name}/labels/*.txt
+            sleep 2
             python3 detect.py\
                 --source ${out_dec_rgb_path}/\
                 --weights weights/yolov3.pt\
@@ -136,12 +142,15 @@ do
                 --project output/${class_cat}\
                 --name ${seq_name}\
                 --exist-ok
+            sleep 2
             cd ..
             
             python3 yolo2mot.py\
                 --class_cat ${class_cat}\
                 --seq_name ${seq_name}\
-                --class_id ${class_id}
+                --class_id ${class_id}\
+                --source_path ${out_dec_rgb_path}
+            sleep 2
             
             cd sort
             python3 sort.py\
@@ -150,28 +159,35 @@ do
                 --max_age 1\
                 --min_hits 5\
                 --iou_threshold 0.4
+            sleep 2
             cd ..
 
             # clean up the result folder from py-motmetrics
             rm py-motmetrics/res_dir_comp/*.txt
+            sleep 2
             
             cp sort/output/${class_cat}_${seq_name}_${class_id}.txt py-motmetrics/res_dir_comp/
+            sleep 2
             cp sort/output/${class_cat}_${seq_name}_${class_id}.txt py-motmetrics/res_dir/ # keep copy in res_dir
+            sleep 2
             
             ## evaluate the performance
             python3 py-motmetrics/motmetrics/apps/eval_motchallenge.py py-motmetrics/gt_dir/ py-motmetrics/res_dir_comp/ > data/one_iter_${uuid}.txt
+            sleep 2
 
             # extracting values
             python3 experiment_tracker_format.py\
                 --input_path data/one_iter_${uuid}.txt\
-                --output_path data/experiment_uncompressed_result.csv\
+                --output_path ${output_path}\
                 --class_cat ${class_cat}\
                 --seq_name ${seq_name}\
                 --class_id ${class_id}\
                 --qp ${qp}\
                 --msr ${msr}
+            sleep 2
         done
     done
 done
 
 rm data/one_iter_${uuid}.txt
+sleep 2
