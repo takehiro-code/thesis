@@ -43,7 +43,11 @@ comp_source_path=/local-scratch/tta46/thesis/seq_comp
 #time bash optimize_detector_v2.sh > data/log/tuning_detector_${class_cat}_${seq_name}_${class_id}_v2.log
 
 
-class_cat=ClassC
-seq_name=PartyScene
-class_id="0"
-time bash optimize_tracker.sh > data/log/tuning_tracker_${class_cat}_${seq_name}_${class_id}.log
+#class_cat=ClassC
+#seq_name=PartyScene
+#class_id="0"
+#time bash optimize_tracker.sh > data/log/tuning_tracker_${class_cat}_${seq_name}_${class_id}.log
+
+echo "hello"
+sleep 2
+echo "hello 2"
