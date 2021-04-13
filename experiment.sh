@@ -5,7 +5,7 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
-output_path='data/experiment_result_v2.csv'
+output_path='data/experiment_result_v2_2.csv'
 
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
@@ -18,7 +18,7 @@ uuid=$(uuidgen) # unique identifier
 class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE') # entire experiment
 # class_arr=('ClassB') # for testing
 qp_arr=(18 22 26 30 34 38 42 46)
-msr_arr=(8 16)
+msr_arr=(32 64)
 
 for class_cat in ${class_arr[@]}
 do
@@ -38,7 +38,7 @@ do
         resln='832x480'
     elif [ ${class_cat} == 'ClassD' ]
     then
-        seq_name_arr=('BasketballPass' 'BlowingBubbles' 'RaceHorsesD')
+        seq_name_arr=('BasketballPass' 'BlowingBubbles' 'RaceHorses') # mistake in the name, RaceHorses is RaceHorsesD
         resln='416x240'
     elif [ ${class_cat} == 'ClassE' ]
     then
@@ -78,7 +78,7 @@ do
         elif  [ ${seq_name} == 'BlowingBubbles' ]
         then
             class_id_arr=(0 41 77 "all")
-        elif [ ${seq_name} == 'RaceHorsesD' ]
+        elif [ ${seq_name} == 'RaceHorses' ]
         then
             class_id_arr=(0 17 "all")
         elif [ ${seq_name} == 'FourPeople' ]
