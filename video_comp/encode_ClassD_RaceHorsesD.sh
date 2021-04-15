@@ -2,7 +2,7 @@ src_addr='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 
 class='ClassD'
 seq="${src_addr}/${class}/RaceHorses_416x240_30.yuv"
-name='RaceHorses'
+name='RaceHorsesD'
 
 #qp_arr=(18 22 26 30 34 38)
 #msr=(16 32 64)
