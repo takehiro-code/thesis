@@ -227,23 +227,33 @@ for seq_name in seq_name_list:
 \\section{{{class_cat} {seq_name}}}
 \\label{{sec:appendix/{seq_name}_all}}
 
-\\begin{{figure}}[htb]
+
+% visualization figure
+\\begin{{figure}}[htbp]
 \\centering
-\\includegraphics[width=1.0\linewidth]{{img/appendix/{seq_name}_all_qp.pdf}}
-\\caption[Result of all object classes in {class_cat} {seq_name} with Horizontal Axis of QP]{{}}
+
+\\begin{{subfigure}}{{0.8\\textwidth}}
+\\centering
+\\includegraphics[width=\linewidth]{{img/appendix/{seq_name}_all_qp.pdf}}
+\\caption{{[MOTA score vs QP on different MSR}}
 \\label{{fig:{seq_name}_all_qp}}
-\\end{{figure}}
+\\end{{subfigure}}
 
+\\bigskip
 
-\\begin{{figure}}[htb]
+\\begin{{subfigure}}{{0.8\\textwidth}}
 \\centering
-\\includegraphics[width=1.0\linewidth]{{img/appendix/{seq_name}_all_msr.pdf}}
-\\caption[Result of all object classes in {class_cat} {seq_name} with Horizontal Axis of MSR]{{}}
+\\includegraphics[width=\linewidth]{{img/appendix/{seq_name}_all_msr.pdf}}
+\\caption{{[MOTA score vs MSR on different QP}}
 \\label{{fig:{seq_name}_all_msr}}
+\\end{{subfigure}}
+
+\\caption{{Result of all object classes in {class_cat} {seq_name}}}
+\\label{{fig:{seq_name}_all}} % label should be placed below caption
 \\end{{figure}}
 
 
-
+% table
 \\begin{{table}}
 \\centering
 \\caption{{Result of all object classes in {class_cat} {seq_name}}}
