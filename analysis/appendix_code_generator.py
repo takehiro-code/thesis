@@ -3,7 +3,6 @@ import glob
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from skimage import io
 import cv2
 import os
 import argparse
@@ -229,13 +228,13 @@ for seq_name in seq_name_list:
 
 
 % visualization figure
-\\begin{{figure}}[htbp]
+\\begin{{figure}}[!htbp]
 \\centering
 
 \\begin{{subfigure}}{{0.8\\textwidth}}
 \\centering
 \\includegraphics[width=\linewidth]{{img/appendix/{seq_name}_all_qp.pdf}}
-\\caption{{[MOTA score vs QP on different MSR}}
+\\caption{{MOTA score vs QP on different MSR}}
 \\label{{fig:{seq_name}_all_qp}}
 \\end{{subfigure}}
 
@@ -244,7 +243,7 @@ for seq_name in seq_name_list:
 \\begin{{subfigure}}{{0.8\\textwidth}}
 \\centering
 \\includegraphics[width=\linewidth]{{img/appendix/{seq_name}_all_msr.pdf}}
-\\caption{{[MOTA score vs MSR on different QP}}
+\\caption{{MOTA score vs MSR on different QP}}
 \\label{{fig:{seq_name}_all_msr}}
 \\end{{subfigure}}
 
@@ -317,7 +316,7 @@ for seq_name in seq_name_list:
 
 
 
-\\begin{{table}}[]
+\\begin{{table}}[!htbp]
 \\centering
 \\caption{{Multiple Linear Regression Analysis Result for {class_cat} {seq_name}}}
 \\resizebox{{1.0\linewidth}}{{!}}{{
