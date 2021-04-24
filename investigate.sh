@@ -5,7 +5,7 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
-output_path='data/investigate_ClassD.csv'
+output_path='data/investigate-04-24-2021.csv'
 
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
@@ -16,7 +16,7 @@ sleep 2
 uuid=$(uuidgen) # unique identifier
 
 #class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE') # entire experiment
-class_arr=('ClassD') # Part of the experiment
+class_arr=('ClassB' 'ClassD' 'ClassE') # Part of the experiment
 qp_arr=(18 22 26 30 34 38 42 46)
 msr_arr=(16)
 
@@ -24,14 +24,9 @@ for class_cat in ${class_arr[@]}
 do
     if [ ${class_cat} == 'ClassB' ]
     then
-        seq_name_arr=('BasketballDrive' 'Cactus' 'Kimono' 'ParkScene')
+        # seq_name_arr=('BasketballDrive' 'Cactus' 'Kimono' 'ParkScene')
+        seq_name_arr=('Cactus')
         resln='1920x1080'
-
-        # test stage
-        # seq_name_arr=('BasketballDrive')
-        # qp_arr=(18)
-        # msr_arr=(64)
-
     elif [ ${class_cat} == 'ClassC' ]
     then
         seq_name_arr=('BasketballDrill' 'RaceHorsesC') # exclude training sequence
@@ -44,7 +39,8 @@ do
         resln='416x240'
     elif [ ${class_cat} == 'ClassE' ]
     then
-        seq_name_arr=('FourPeople' 'Johnny' 'KristenAndSara')
+        # seq_name_arr=('FourPeople' 'Johnny' 'KristenAndSara')
+        seq_name_arr=('Johnny')
         resln='1280x720'
     else
         echo "Other classes not implemented"
@@ -58,7 +54,8 @@ do
             class_id_arr=(0 32 56 "all")
         elif [ ${seq_name} == 'Cactus' ]
         then
-            class_id_arr=(58 "all")
+            # class_id_arr=(58 "all")
+            class_id_arr=(58)
         elif [ ${seq_name} == 'Kimono' ]
         then
             class_id_arr=(0 26 "all")
@@ -90,7 +87,8 @@ do
             class_id_arr=(0 41 56 58 "all")
         elif [ ${seq_name} == 'Johnny' ]
         then
-            class_id_arr=(0 27 63 "all")
+            # class_id_arr=(0 27 63 "all")
+            class_id_arr=(0)
         elif [ ${seq_name} == 'KristenAndSara' ]
         then
             class_id_arr=(0 63 67 "all")

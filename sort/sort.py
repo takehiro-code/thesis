@@ -322,7 +322,8 @@ if __name__ == '__main__':
           fn = glob.glob(f"{img_path}/*%03d.png"%(frame))[0]
           im =io.imread(fn)
           ax1.imshow(im)
-          plt.title(seq + ' Tracked Targets')
+          # plt.title(seq + ' Tracked Targets')
+          ax1.set_axis_off()
 
         start_time = time.time()
         trackers = mot_tracker.update(dets)
@@ -341,7 +342,8 @@ if __name__ == '__main__':
           fig.canvas.flush_events()
           plt.draw()
           img_name = fn.split("/")[-1] # when you want to generate images
-          plt.savefig(f"{vid_dir_path}/{img_name}")
+          # bbox_inches='tight', pad_inches=0 make figure tight and remove all the white space
+          plt.savefig(f"{vid_dir_path}/{img_name}", bbox_inches='tight', pad_inches=0)
           ax1.cla()
 
   print("Total Tracking took: %.3f seconds for %d frames or %.1f FPS" % (total_time, total_frames, total_frames / total_time))
