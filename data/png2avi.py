@@ -3,8 +3,8 @@ import os
 import re
 import pdb
 
-image_folder = 'vid'
-video_name = 'ClassD_BasketballPass_0.avi'
+image_folder = 'vid/ClassB_Cactus_58_qp46_msr16'
+video_name = 'ClassB_Cactus_58_qp26_msr16.avi'
 
 def natural_sort(l): 
     convert = lambda text: int(text) if text.isdigit() else text.lower() 
@@ -16,11 +16,14 @@ images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
 images = natural_sort(images)
 frame = cv2.imread(os.path.join(image_folder, images[0]))
 height, width, layers = frame.shape
+shape = width, height
 
 video = cv2.VideoWriter(video_name, 0, fps=30, frameSize=(width,height))
 
-for image in images:
-    video.write(cv2.imread(os.path.join(image_folder, image)))
+for img_path in images:
+    image = cv2.imread(os.path.join(image_folder, img_path))
+    resized=cv2.resize(image, shape) 
+    video.write(resized)
 
-cv2.destroyAllWindows()
+# cv2.destroyAllWindows()
 video.release()
