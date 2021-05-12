@@ -31,7 +31,7 @@ input_path = f"{data_path}/experiment_result_v3.csv"
 input_path_uncomp = f"{data_path}/experiment_uncompressed_result_v2.csv"
 class_id = "all"
 visual_metric = "MOTA"
-generate_figure = True
+generate_figure = False
 
 seq_name_list = ['BasketballDrive','Cactus', 'Kimono', 'ParkScene',
         'BasketballDrill', 'RaceHorsesC',
@@ -263,14 +263,16 @@ for seq_name in seq_name_list:
 \\begin{{figure}}[!htbp]
 \\centering
 \\includegraphics[width=1.0\linewidth]{{img/appendix/{seq_name}_all_multiplots_qp.pdf}}
-\\caption[Result of all object classes in {class_cat} {seq_name} with Horizontal Axis of QP]{{}}
+\\caption[Visualization of performance results in {class_cat} {seq_name} at different QP]
+{{Visualization of performance results in {class_cat} {seq_name} at different QP.}}
 \\label{{fig:{seq_name}_all_qp}}
 \\end{{figure}}
 
 \\begin{{figure}}[!htbp]
 \\centering
 \\includegraphics[width=1.0\linewidth]{{img/appendix/{seq_name}_all_multiplots_msr.pdf}}
-\\caption[Result of all object classes in {class_cat} {seq_name} with Horizontal Axis of MSR]{{}}
+\\caption[Visualization of performance results in {class_cat} {seq_name} at different MSR]
+{{Visualization of performance results in {class_cat} {seq_name} at different MSR.}}
 \\label{{fig:{seq_name}_all_msr}}
 \\end{{figure}}
 
@@ -279,7 +281,8 @@ for seq_name in seq_name_list:
 % table
 \\begin{{table}}
 \\centering
-\\caption{{Result of all object classes in {class_cat} {seq_name}}}
+\\caption[Performance results in {class_cat} {seq_name}]
+{{Performance results in {class_cat} {seq_name}.}}
 
 
 % table for uncompressed
@@ -342,7 +345,8 @@ for seq_name in seq_name_list:
 
 \\begin{{table}}[!htbp]
 \\centering
-\\caption{{Multiple Linear Regression Analysis Result for {class_cat} {seq_name}}}
+\\caption[Multiple linear regression analysis result for {class_cat} {seq_name}]
+{{Multiple linear regression analysis result for {class_cat} {seq_name}}}
 \\resizebox{{1.0\linewidth}}{{!}}{{
 {df_stats.to_latex(index=True, multirow=True)}
 }}
