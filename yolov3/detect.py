@@ -110,6 +110,10 @@ def detect(save_img=False):
                     if save_img or view_img:  # Add bbox to image
                         label = '%s %.2f' % (names[int(cls)], conf)
                         plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
+            else:
+                # writing into empty file
+                with open(txt_path + '.txt', 'a') as f:
+                    pass
 
             # Print time (inference + NMS)
             print('%sDone. (%.3fs)' % (s, t2 - t1))

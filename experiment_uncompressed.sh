@@ -5,7 +5,7 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
-output_path='data/experiment_uncompressed_result_v2.csv'
+output_path='data/experiment_uncomp-06-05-2021.csv'
 
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
@@ -15,7 +15,8 @@ sleep 2
 uuid=$(uuidgen) # unique identifier
 
 class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE')
-# class_arr=('ClassB') # for testing
+# class_arr=('ClassB' 'ClassD' 'ClassE') # part of the experiment
+class_arr=('ClassD')
 
 qp=0 # actually not qp=0, but rather uncompressed
 msr=0 # actually not msr=0, but rather uncompressed
@@ -25,11 +26,8 @@ do
     if [ ${class_cat} == 'ClassB' ]
     then
         seq_name_arr=('BasketballDrive' 'Cactus' 'Kimono' 'ParkScene')
+        # seq_name_arr=('Cactus') # for individual analysis
         resln='1920x1080'
-
-        # test stage
-        # seq_name_arr=('BasketballDrive')
-
     elif [ ${class_cat} == 'ClassC' ]
     then
         seq_name_arr=('BasketballDrill' 'RaceHorsesC') # excluded training sequence
@@ -37,10 +35,12 @@ do
     elif [ ${class_cat} == 'ClassD' ]
     then
         seq_name_arr=('BasketballPass' 'BlowingBubbles' 'RaceHorsesD')
+        # seq_name_arr=('BasketballPass' 'BlowingBubbles') # for individual analysis
         resln='416x240'
     elif [ ${class_cat} == 'ClassE' ]
     then
         seq_name_arr=('FourPeople' 'Johnny' 'KristenAndSara')
+        # seq_name_arr=('Johnny') # for individual analysis
         resln='1280x720'
     else
         echo "Other classes not implemented"
@@ -56,6 +56,7 @@ do
         elif [ ${seq_name} == 'Cactus' ]
         then
             class_id_arr=(58 "all")
+            # class_id_arr=(58) # for individual analysis
             yuv_name="Cactus_1920x1080_50.yuv"
         elif [ ${seq_name} == 'Kimono' ]
         then
@@ -80,10 +81,12 @@ do
         elif [ ${seq_name} == 'BasketballPass' ]
         then
             class_id_arr=(0 32 56 "all")
+            # class_id_arr=(0) # for individual analysis
             yuv_name="BasketballPass_416x240_50.yuv"
         elif  [ ${seq_name} == 'BlowingBubbles' ]
         then
             class_id_arr=(0 41 77 "all")
+            # class_id_arr=(0) # for individual analysis
             yuv_name="BlowingBubbles_416x240_50.yuv"
         elif [ ${seq_name} == 'RaceHorsesD' ]
         then
@@ -96,6 +99,7 @@ do
         elif [ ${seq_name} == 'Johnny' ]
         then
             class_id_arr=(0 27 63 "all")
+            # class_id_arr=(0) # for individual analysis
             yuv_name="Johnny_1280x720_60.yuv"
         elif [ ${seq_name} == 'KristenAndSara' ]
         then
@@ -144,14 +148,51 @@ do
                 --exist-ok
             sleep 2
             cd ..
-            
-            python3 yolo2mot.py\
+
+            # copying the det results to the folder for backup
+            mkdir -p data/det_results/${class_cat}_${seq_name}_${class_id}_uncompressed
+            rm data/det_results/${class_cat}_${seq_name}_${class_id}_uncompressed/*.txt
+            sleep 2
+            cp yolov3/output/${class_cat}/${seq_name}/labels/*.txt data/det_results/${class_cat}_${seq_name}_${class_id}_uncompressed
+            sleep 2
+
+            # convert to YOLO format to PASCAL VOC format for mAP measurement
+            conf=0.25
+            iou=0.55
+            img_s=640
+            rm mAP/input/detection-results/*.txt
+            sleep 2
+            rm mAP/input/ground-truth/*.txt
+            sleep 2
+            python3 -W ignore yolo2map.py\
+            --class_cat $class_cat\
+            --seq_name $seq_name\
+            --class_id ${class_id}\
+            --source_path $out_dec_rgb_path
+            sleep 2
+
+            # evaluating mAP@50
+            cd mAP
+            mAP=`python3 main.py -na -np -q\
+            --class_cat ${class_cat}\
+            --seq_name ${seq_name}\
+            --class_id ${class_id}\
+            --conf_thres ${conf}\
+            --iou_thres ${iou}\
+            --img_size ${img_s}`
+            cd ..
+
+            # converting YOLO to MOT format
+            python3 -W ignore yolo2mot.py\
                 --class_cat ${class_cat}\
                 --seq_name ${seq_name}\
                 --class_id ${class_id}\
                 --source_path ${out_dec_rgb_path}
             sleep 2
             
+            ## uncomment this to generate the video 
+            # vid_dir_name=${class_cat}_${seq_name}_${class_id}_uncomp
+            # mkdir -p data/vid/${vid_dir_name}
             cd sort
             python3 sort.py\
                 --seq_path input/${class_cat}_${seq_name}_${class_id}\
@@ -160,6 +201,17 @@ do
                 --min_hits 5\
                 --iou_threshold 0.4
             sleep 2
+
+            ## use the following to generate the video
+            # python3 sort.py\
+            #     --seq_path input/${class_cat}_${seq_name}_${class_id}\
+            #     --img_path ${out_dec_rgb_path}/\
+            #     --max_age 1\
+            #     --min_hits 5\
+            #     --iou_threshold 0.4\
+            #     --display\
+            #     --vid_dir_path ../data/vid/${vid_dir_name}
+            # sleep 2
             cd ..
 
             # clean up the result folder from py-motmetrics
@@ -183,8 +235,14 @@ do
                 --seq_name ${seq_name}\
                 --class_id ${class_id}\
                 --qp ${qp}\
-                --msr ${msr}
+                --msr ${msr}\
+                --mAP ${mAP}
             sleep 2
+
+
+            ## use this to test the only 1 iteration in the loop
+            # rm data/one_iter_${uuid}.txt
+            # exit
         done
     done
 done

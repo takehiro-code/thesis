@@ -91,7 +91,14 @@ if __name__ == '__main__':
                     else:
                         frame = int(txt.split("_")[-1].split(".")[0]) + 1      
                     #print(f"for frame {frame} ...")
-                    class_id, x, y, w, h, conf_arr = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
+                    
+                    data =  np.genfromtxt(txt, unpack=False, encoding='utf_8_sig')
+
+                    # if data is empty at the frame XX
+                    if data.size == 0:
+                        # go to the next frame (next loop)
+                        continue
+                    class_id, x, y, w, h, conf_arr = data.T
 
                     # Either numpy array or single value if you read one row
                     if isinstance(class_id, np.ndarray):
@@ -230,7 +237,13 @@ if __name__ == '__main__':
                     else:
                         frame = int(txt.split("_")[-1].split(".")[0]) + 1      
                     #print(f"for frame {frame} ...")
-                    class_id, x, y, w, h, conf_arr = np.genfromtxt(txt, unpack=True, encoding='utf_8_sig')
+                    data =  np.genfromtxt(txt, unpack=False, encoding='utf_8_sig')
+                    
+                    # if data is empty at the frame XX
+                    if data.size == 0:
+                        # go to the next frame (next loop)
+                        continue
+                    class_id, x, y, w, h, conf_arr = data.T
 
                     # Either numpy array or single value if you read one row
                     if isinstance(class_id, np.ndarray):

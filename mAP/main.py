@@ -10,6 +10,7 @@ import math
 import numpy as np
 
 MINOVERLAP = 0.5 # default value (defined in the PASCAL VOC2012 challenge)
+# MINOVERLAP_list = [0.5, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95]
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-na', '--no-animation', help="no animation is shown.", action="store_true")
@@ -733,11 +734,12 @@ with open(output_files_path + "/output.txt", 'w') as output_file:
     mAP = sum_AP / n_classes
     text = "mAP = {0:.2f}%".format(mAP*100)
     output_file.write(text + "\n")
-    print(text)
+    # print(text) # original code to print mAP = ..
+    print(sum_AP / n_classes * 100) # print and pass it to the SORT
 
-    # generating result
-    with open(f"../data/tuning_detector_result_{args.class_cat}_{args.seq_name}_{str(args.class_id)}.csv", 'a') as f:
-        print(f"{args.conf_thres},{args.iou_thres},{args.img_size},{mAP}", file=f)
+    # # generating result # for optimizing detector
+    # with open(f"../data/tuning_detector_result_{args.class_cat}_{args.seq_name}_{str(args.class_id)}.csv", 'a') as f:
+    #     print(f"{args.conf_thres},{args.iou_thres},{args.img_size},{mAP}", file=f)
 
 """
  Draw false negatives
