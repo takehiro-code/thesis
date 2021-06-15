@@ -5,7 +5,7 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
-output_path='data/experiment_uncomp-06-05-2021.csv'
+output_path='data/experiment-uncomp-06-14-2021.csv'
 
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
@@ -15,8 +15,7 @@ sleep 2
 uuid=$(uuidgen) # unique identifier
 
 class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE')
-# class_arr=('ClassB' 'ClassD' 'ClassE') # part of the experiment
-class_arr=('ClassD')
+# class_arr=('ClassD') # part of the experiment
 
 qp=0 # actually not qp=0, but rather uncompressed
 msr=0 # actually not msr=0, but rather uncompressed

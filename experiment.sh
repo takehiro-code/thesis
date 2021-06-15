@@ -5,7 +5,7 @@ yuv_source_path='/local-scratch/chyomin/HEVC_Common_Test_Sequence'
 test_source_path='/local-scratch/tta46/thesis/seq_test'
 out_dec_rgb_path='/local-scratch/tta46/thesis/video_comp/out_dec_rgb'
 
-output_path='data/experiment-2021-06-07.csv'
+output_path='data/experiment-ClassE-2021-06-13.csv'
 
 #prepare and clean up
 mkdir -p py-motmetrics/res_dir_comp
@@ -16,7 +16,7 @@ sleep 2
 uuid=$(uuidgen) # unique identifier
 
 # class_arr=('ClassB' 'ClassC' 'ClassD' 'ClassE') # entire experiment
-class_arr=('ClassB') # part of the experiment
+class_arr=('ClassE') # part of the experiment
 qp_arr=(18 22 26 30 34 38 42 46)
 msr_arr=(8 16 32 64)
 
