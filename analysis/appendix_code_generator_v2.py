@@ -27,11 +27,11 @@ pd.options.display.float_format = '{:.2f}'.format
 
 ## input
 data_path = "../data"
-input_path = f"{data_path}/experiment_result_v3.csv"
-input_path_uncomp = f"{data_path}/experiment_uncompressed_result_v2.csv"
+input_path = f"{data_path}/experiment-result-2021-06-15.csv"
+input_path_uncomp = f"{data_path}/experiment-uncomp-06-14-2021.csv"
 class_id = "all"
 visual_metric = "MOTA"
-generate_figure = False
+generate_figure = True
 
 seq_name_list = ['BasketballDrive','Cactus', 'Kimono', 'ParkScene',
         'BasketballDrill', 'RaceHorsesC',
@@ -58,10 +58,10 @@ for seq_name in seq_name_list:
     df['F1'] = 2 * df['Prcn'] * df['Rcll'] / (df['Prcn'] + df['Rcll'])
     df['MOTP'] = ( 1 - df['MOTP'] ) * 100 
     header = ['class_cat', 'seq_name', 'class_id', 'qp', 'msr', 'idtp', 'idfp', 'idfn', 'IDF1', 'IDP', 'IDR',
-            'Rcll', 'Prcn', 'F1', 'GT', 'MT', 'PT', 'ML', 'num_detections', 'FP', 'FN', 'IDs', 'FM', 'MOTA', 'MOTP']
+            'Rcll', 'Prcn', 'F1', 'GT', 'MT', 'PT', 'ML', 'num_detections', 'FP', 'FN', 'IDs', 'FM', 'mAP', 'MOTA', 'MOTP']
     df = df[header] # re-arrange
     df.columns = ['class_cat', 'seq_name', 'class_id', 'QP', 'MSR', 'IDTP', 'IDFP', 'IDFN', 'IDF1', 'IDP', 'IDR',
-            'Recall', 'Precision', 'F1', 'GT', 'MT', 'PT', 'ML', 'TP', 'FP', 'FN', 'IDs', 'FM', 'MOTA', 'MOTP']
+            'Recall', 'Precision', 'F1', 'GT', 'MT', 'PT', 'ML', 'TP', 'FP', 'FN', 'IDs', 'FM', 'mAP-50', 'MOTA', 'MOTP']
     header = df.columns
     df = df[header]
 
@@ -90,7 +90,8 @@ for seq_name in seq_name_list:
         num = 0
         for row in range(5):
             for col in range(4):
-                
+                if num == 9: # skiping GT, since it is constant, no need to plot it
+                    num += 1
                 # plot uncompressed result
                 x = df_seq.query('MSR == 8')['QP']
                 metric = df_seq.iloc[:, 5+num].name
@@ -162,7 +163,8 @@ for seq_name in seq_name_list:
         num = 0
         for row in range(5):
             for col in range(4):
-                
+                if num == 9: # skiping GT, since it is constant, no need to plot it
+                    num += 1
                 
                 # plot uncompressed result
                 x = df_seq.query('QP == 18')['MSR']
@@ -216,36 +218,6 @@ for seq_name in seq_name_list:
         plt.savefig(f"C:/OneDrive/SFU/ENSC498, 499/images/Appendix/{seq_name}_all_multiplots_msr.pdf", bbox_inches="tight")
 
     # ----------------------------------------------------------------------------------------------------
-    # regression
-    # ----------------------------------------------------------------------------------------------------
-
-    import statsmodels.api as sm
-    import statsmodels.formula.api as smf
-    from sklearn.linear_model import LinearRegression
-
-    df_all_avg = pd.concat([df_seq_cl_msr8, df_seq_cl_msr16, df_seq_cl_msr32, df_seq_cl_msr64])
-    df_stats = pd.DataFrame([])
-    # display(df_all_avg)
-    header = ['QP', 'MSR', 'IDTP', 'IDFP', 'IDFN', 'IDF1', 'IDP', 'IDR',
-            'Recall', 'Precision', 'F1', 'MT', 'PT', 'ML', 'TP', 'FP', 'FN', 'IDs', 'FM', 'MOTA', 'MOTP']
-    df_all_avg = df_all_avg[header]
-
-    for metric in df_all_avg:
-        if metric != 'QP' and metric != 'MSR':
-            result = smf.ols(formula=f"{metric} ~ QP + MSR + QP * MSR", data=df_all_avg).fit()
-            series = result.params
-            series['p-value(Intercept)'] =  result.pvalues[0]
-            series['p-value(QP)'] =  result.pvalues[1]
-            series['p-value(MSR)'] =  result.pvalues[2]
-            series['p-value(QP:msr)'] =  result.pvalues[3]
-            #series['rsquared'] = result.rsquared
-            df_stats[metric] = series
-
-    df_stats.index = ['coefficient(Intercept)', 'coefficient(QP)', 'coefficient(MSR)', 'coefficient(QP*MSR)',
-                    'p-value(Intercept)', 'p-value(QP)', 'p-value(MSR)', 'p-value(QP*MSR)']
-
-
-    # ----------------------------------------------------------------------------------------------------
     # latex code generator
     # ----------------------------------------------------------------------------------------------------
 
@@ -255,7 +227,7 @@ for seq_name in seq_name_list:
 
         # latex code
         tex = f"""
-\\section{{{class_cat} {seq_name}}}
+\\section{{{seq_name}}}
 \\label{{sec:appendix/{seq_name}_all}}
 
 
@@ -263,16 +235,16 @@ for seq_name in seq_name_list:
 \\begin{{figure}}[!htbp]
 \\centering
 \\includegraphics[width=1.0\linewidth]{{img/appendix/{seq_name}_all_multiplots_qp.pdf}}
-\\caption[Visualization of performance results in {class_cat} {seq_name} at different QP]
-{{Visualization of performance results in {class_cat} {seq_name} at different QP.}}
+\\caption[Visualization of performance results on {seq_name} at different QP]
+{{Visualization of performance results on {seq_name} at different QP.}}
 \\label{{fig:{seq_name}_all_qp}}
 \\end{{figure}}
 
 \\begin{{figure}}[!htbp]
 \\centering
 \\includegraphics[width=1.0\linewidth]{{img/appendix/{seq_name}_all_multiplots_msr.pdf}}
-\\caption[Visualization of performance results in {class_cat} {seq_name} at different MSR]
-{{Visualization of performance results in {class_cat} {seq_name} at different MSR.}}
+\\caption[Visualization of performance results on {seq_name} at different MSR]
+{{Visualization of performance results on {seq_name} at different MSR.}}
 \\label{{fig:{seq_name}_all_msr}}
 \\end{{figure}}
 
@@ -281,8 +253,8 @@ for seq_name in seq_name_list:
 % table
 \\begin{{table}}
 \\centering
-\\caption[Performance results in {class_cat} {seq_name}]
-{{Performance results in {class_cat} {seq_name}.}}
+\\caption[Performance results on {seq_name}]
+{{Performance results on {seq_name}.}}
 
 
 % table for uncompressed
@@ -338,19 +310,6 @@ for seq_name in seq_name_list:
 
 
 \\label{{tab:{seq_name}_all}}
-\\end{{table}}
-
-
-
-
-\\begin{{table}}[!htbp]
-\\centering
-\\caption[Multiple linear regression analysis result for {class_cat} {seq_name}]
-{{Multiple linear regression analysis result for {class_cat} {seq_name}}}
-\\resizebox{{1.0\linewidth}}{{!}}{{
-{df_stats.to_latex(index=True, multirow=True)}
-}}
-\\label{{tab:{seq_name}_all_reg}}
 \\end{{table}}
 
 """
