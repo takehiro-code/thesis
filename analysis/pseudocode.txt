@@ -1,0 +1,6 @@
+if (highest_NCC >= threshold)
+	Automated ID assignment (copying ID from frame n to n+1)
+else if (highest_NCC != -1)
+	Manual ID assignment
+else
+	Manual ID assignment

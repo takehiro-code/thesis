@@ -115,7 +115,9 @@ for seq_name in seq_name_list:
                 y = df_seq.query('MSR == 64').iloc[:, 5+num]
                 axs[row, col].plot(x, y, '.-', label='MSR=64', color=palette(4))
                 
-            
+                if num > 16:
+                    axs[row, col].set_xlabel("QP")
+
                 num += 1
                 
                 if row == 0 and col == 0:
@@ -205,6 +207,9 @@ for seq_name in seq_name_list:
                 y = df_seq.query('QP == 46').iloc[:, 5+num]
                 axs[row, col].plot(x, y, '.-', label='QP=46', color=palette(30),)
                 
+                if num > 16:
+                    axs[row, col].set_xlabel("MSR")
+
                 num += 1
                 
                 if row == 0 and col == 0:
