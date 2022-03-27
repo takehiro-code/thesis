@@ -49,6 +49,7 @@ video_comp/per-sequence/
 *.yuv
 *.avi
 *.mp4
+*.gif
 *.pt
 *.weight
 *.pyc
